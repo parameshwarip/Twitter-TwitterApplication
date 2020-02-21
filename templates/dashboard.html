@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" rel="stylesheet">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+
+
+    <style>
+        .sidebar.a {
+
+            float: left;
+            width: 30%;
+            height: 100px;
+        / only for demonstration,
+        should be removed / background: #ccc;
+            padding: 20px;
+        }
+
+        body {
+            font-family: Sans-serif;
+            font-style: italic;
+            font-size: 20px;
+        }
+
+
+        .sidebar {
+            height: 100%
+            width: 160px;
+            position: fixed;
+            z-index: 1;
+            top: 50;
+            left: 0;
+            background-color: #fff;
+            overflow-x: hidden;
+            padding-top: 16px;
+        }
+
+        .sidebar a {
+            padding: 6px 8px 6px 16px;
+            text-decoration: none;
+            font-size: 20px;
+            color: #3385ff;
+            display: block;
+        }
+
+        .sidebar a:hover {
+            color: #7575a3;
+        }
+
+
+        .container {
+            top: 0;
+            left: 10;
+            float: center;
+            padding: 20px;
+            width: 60%;
+            background-color: #fff;
+            height: 100px;
+        }
+    </style>
+</head>
+<body ng-app="Application">
+<!-- <nav class="navbar navbar-dark bg-primary">
+<a class="navbar-brand" href="#">twitter</a>
+<form class="form-inline my-2 my-lg-0">
+<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+</form>
+</nav>-->
+<i class="fa fa-twitter" style="font-size:48px;color:blue"></i>
+<br>
+<br>
+<div class="sidebar">
+
+    <a href="#"> <i class="fa fa-fw fa-home" style="font-size:20px;color:blue"></i>Home</a>
+    <br>
+    <a href="#"><i class="fa fa-fw fa-search" style="font-size:20px;color:blue"></i>Explore</a>
+    <br>
+    <a href="#"><i class="fa fa-fw fa-bell" style="font-size:20px;color:blue"></i>Notification</a>
+    <br>
+    <a href="#"><i class="fa fa-fw fa-user" style="font-size:20px;color:blue"></i>Profile</a>
+
+</div>
+<div class="container" role="dialog" tabindex="0">
+
+    <div class="container-dialog" role="document">
+        <div class="modal-content">
+            <p>HOME</p>
+            <div class="modal-body">
+                <i class="fa fa-fw fa-user" style="font-size:20px;color:blue"></i><textarea
+                    id="post_text" placeholder="What's happening?" style="height:80px;width:500px"></textarea>
+                <hr/>
+            </div>
+            <div ng-controller="MyController">
+                <label for="file">
+                    <i class="fa fa-fw fa-image" style="font-size:35px;color:blue;top:20px"></i>
+
+                    <input accept="image/jpeg,image/jpg,image/png" data-original-title="upload photos" id="file"
+                           multiple=""
+                           name="image" onchange="angular.element(this).scope().SelectFile(event)" style="display: none"
+                           type="file">
+                    <i class="fa fa-fw fa-film" id="file1" style="font-size:20px;color:blue"></i>
+                    <input accept="video/mp4" data-original-title="upload photos" id="file"
+                           multiple=""
+                           name="video" onchange="angular.element(this).scope().SelectFile(event)" style="display: none"
+                           type="mp4">
+                    <input accept=".mp4" class="form-control" id="file3" name="file" placeholder="choose file"
+                           type="video/mp4">
+
+                    <i class="fa fa-fw fa-gif" style="font-size:20px;color:blue"></i>
+                    <input accept="image/gif" data-original-titltitle="upload photos" id="file2"
+                           multiple="" name="image" style="display: none"
+                           type="file">
+                    <p><input id="postingconentfile" name="file" type=file>
+
+                </label>
+                <button class="btn btn-primary" id="tweetingbtn" size="20">tweet</button>
+                <img alt="" ng-show="PreviewImage != null" ng-src="{{ PreviewImage }}"
+                     style="height:100px;width:100px"/>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+    <div ng-controller="MyControllerTrend" class="w3-sidebar w3-bar-block pull-right">
+
+     dataattass
+    </div>
+
+<script type="text/javascript">
+    var app = angular.module("Application", []);
+    app.controller('MyController', function ($scope) {
+        $scope.SelectFile = function (e) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $scope.PreviewImage = e.target.result;
+                $scope.$apply();
+            };
+            reader.readAsDataURL(e.target.files[0]);
+        };
+    });
+
+    app.controller("MyControllerTrend", function ($scope, $http) {
+        $scope.userData = {};
+        var req = {
+            method: 'GET',
+            url: 'https://api.twitter.com/1.1/trends/place.json?id=23424848',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer AAAAAAAAAAAAAAAAAAAAAAJFCgEAAAAAa7FQmixNzSu5lZkIkqBsav7jXpI%3DQRdTBvjL4Y1xNJmigaOgWOsvIfQrDJ2iO8PSfzQniAl9JJr9qJ'
+            }
+        }
+
+        $http(req).then(function (response) {
+            var newData = new Array();
+
+            newData = response.data;
+            var jsonData1 = {};
+            jsonData1 = newData[0].trends;
+            $scope.userData = jsonData1;
+        }, function (response) {
+            alert(response.data);
+
+        });
+    });
+
+    $("#file1").click(function () {
+        alert("this is the click function")
+    });
+    $("#tweetingbtn").click(function () {
+
+        var datas = {
+            "postcontent": $("#post_text").val(),
+            "contentfile": $("#postingconentfile").val()
+        };
+        var fullPath = $("#postingconentfile").val();
+
+        var startIndex = (fullPath.indexOf('\\') >= 0 ? fullPath.lastIndexOf('\\') : fullPath.lastIndexOf('/'));
+        var filename = fullPath.substring(startIndex);
+        if (filename.indexOf('\\') === 0 || filename.indexOf('/') === 0) {
+            filename = filename.substring(1);
+        }
+
+        $.ajax({
+            url: "/postcontent",
+            type: "POST",
+            data: JSON.stringify({
+                "postcontent": $("#post_text").val(),
+                "contentfile": filename
+            }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+
+            },
+            error: function (result) {
+
+            }
+        });
+    });
+</script>
+</body>
+
+</html>
